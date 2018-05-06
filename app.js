@@ -16,10 +16,6 @@ duration.sec = 0;
 
 var timeTextObject = document.querySelector('.duration__time');
 var unitTextObject = document.querySelector('.duration__unit');
-var startButton = document.querySelector('.start-button');
-var body = document.body;
-
-startButton.addEventListener('click', knappetrykkFunksjon);
 
 function knappetrykkFunksjon(event){
 
@@ -27,7 +23,6 @@ function knappetrykkFunksjon(event){
     startButton.classList.add('hidden');
     unitTextObject.classList.add('hidden');
 
-    body.classList.add('active');
 
     // Start interval timer
     var intervalObj = setInterval(handleInterval, 1000);
@@ -84,5 +79,5 @@ function resetClock(){
     
     startButton.classList.remove('hidden');
     unitTextObject.classList.remove('hidden');
-    body.classList.remove('active');   
+
 }

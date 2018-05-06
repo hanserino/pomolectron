@@ -31,9 +31,16 @@ body{
     text-align: center;
 }
 
-.hidden {
+body[data-active="true"] .start-button, 
+body[data-active="true"] .duration__unit {
     visibility: hidden;
+    border: 2px solid blue;
 }
+
+body[data-active="false"]{
+
+}
+
 
 h1 {
     font-style: italic; 

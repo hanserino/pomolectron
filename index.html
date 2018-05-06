@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 
 <head>
     <meta charset="utf-8">
@@ -24,26 +24,88 @@
         <div id="stuff"></div>
     </div>
 </body>
-<script>
-    let processData = process;
-    console.log(processData);
 
-    let output = `
-        <h3>stuff:</h3>
-        
-        <ul>
-            <li>${processData.env.SHELL}</li>
-            <li>${processData.platform}</li>
+<script>
+    // Electron-moduler
+    const electron = require('electron')
+    const ipcRenderer = electron.ipcRenderer
+
+    //Våre egne moduler
+    const countDown = require('./modules/countDown');
+    const setText = require('./modules/setText');
+
+    const timeTextObject = document.querySelector('.duration__time')
+    const startButton = document.querySelector('.start-button')
+    
+    let duration = {}
+    let active = false;
+
+    const pomodoroMin = 25;
+
+    duration.min = pomodoroMin;
+    duration.sec = 0;
+
+    startButton.addEventListener('click', knappetrykkFunksjon)
+
+    function knappetrykkFunksjon(event){
+
+        event.preventDefault
+        ipcRenderer.send("startClick")
+
+        setActive(true)
+
+        // Start interval timer
+        let intervalObj = setInterval(handleInterval, 1000);
+
+        function handleInterval(){
             
-        </ul>
+            if(duration.min == 0 && duration.sec == 0){
 
-    `;
+                clearInterval(intervalObj)
+                playAlarm("GRATTIS!!!")
+            } else{
+                
+                countDown(duration)
+                showDuration()
+            }
+        }
+    }
 
-    document.getElementById("stuff").innerHTML = output;
+    
 
-</script>
-<script>
-    require('./renderer.js')
+    function showDuration(){
+
+        var min = duration.min
+        var sec = duration.sec
+
+        if(min < 10) {
+            min = '0' + min;
+        }
+        if(sec < 10) {
+            sec = '0' + sec;
+        }
+
+        setText(timeTextObject, min +':'+ sec)
+    }
+
+
+    function playAlarm(text){
+        setText(timeTextObject, text)
+        setTimeout(setActive(false), 3000);
+    }
+
+    function setActive(activeState){
+        active = activeState;
+        document.body.setAttribute('data-active', active)
+
+        if(!active){
+            duration.min = pomodoroMin;
+            timeTextObject.textContent = duration.min;
+        }
+    }
+
+
+    
 </script>
 
 </html>
