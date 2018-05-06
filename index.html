@@ -3,10 +3,9 @@
 
 <head>
     <meta charset="utf-8">
-    <title>Pomodoro</title>
+    <title>Pomolectron</title>
 
-    <link rel="stylesheet" href="css/normalize.css">
-    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="stylesheet.css">
 
     <link href="https://fonts.googleapis.com/css?family=Roboto+Mono:100,300,300i,400,400i" rel="stylesheet">
     
@@ -14,7 +13,7 @@
 
 <body>
     <div class="wrapper">
-        <h1>pomodoro</h1>
+        <h1>pomolectron</h1>
 
         <div class="duration">
             <span class="duration__time">25</span>
@@ -22,10 +21,30 @@
         </div>
 
         <button class="start-button">start</button>
-
+        <div id="stuff"></div>
     </div>
-    <script src="js/main.js"></script>
 </body>
+<script>
+    let processData = process;
+    console.log(processData);
+
+    let output = `
+        <h3>stuff:</h3>
+        
+        <ul>
+            <li>${processData.env.SHELL}</li>
+            <li>${processData.platform}</li>
+            
+        </ul>
+
+    `;
+
+    document.getElementById("stuff").innerHTML = output;
+
+</script>
+<script>
+    require('./renderer.js')
+</script>
 
 </html>
 

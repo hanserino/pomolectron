@@ -1,56 +1,63 @@
+// Henter Electron fra node_modules/ slik at vi kan ta det i bruk
 const electron = require('electron')
 
-// Module to control application life.
+// Electron-modul for å kontrollere livssyklusen til appen
 const app = electron.app
 
-// Module to create native browser window.
+// Electron-modul for å kontrollere nettleservinduet
 const BrowserWindow = electron.BrowserWindow
 
+// Node.js-moduler
 const path = require('path')
 const url = require('url')
 
+// Tom variabel for å kontrollere livssyklusen til app-vinduet
 let mainWindow
 
 function createWindow () {
-    // Create the browser window.
-    mainWindow = new BrowserWindow({width: 800, height: 600})
+    // Lager app-vinduet og setter noen innstillinger
+    mainWindow = new BrowserWindow(
+        {
+            width: 800,
+            height: 600,
+            icon: path.join(__dirname, 'assets/icons/png/icon.png')
+        }
+    )
   
-    // and load the index.html of the app.
+    // Bruker loadUrl til å åpne index.html 
+    // Vi henter den fra filsystemet
+    // (kunne også brukt http)
     mainWindow.loadURL(url.format({
-      pathname: path.join(__dirname, 'index.html'),
-      protocol: 'file:',
-      slashes: true
+        pathname: path.join(__dirname, 'index.html'),
+        protocol: 'file:',
+        slashes: true
     }))
 
-    // Open the DevTools.
-    // mainWindow.webContents.openDevTools()
+    // Åpner devTools automatisk
+    mainWindow.webContents.openDevTools()
 
-    // Emitted when the window is closed.
+    // Kjøres når hoved-vinduet lukkes
     mainWindow.on('closed', function () {
-        // Dereference the window object, usually you would store windows
-        // in an array if your app supports multi windows, this is the time
-        // when you should delete the corresponding element.
+        // Setter mainWindow til null for å tømme hele objektet
+        // som også tømmer minnet i datamaskinen
+        // aka garbage cleaning
         mainWindow = null
     })
 }
 
-// This method will be called when Electron has finished
-// initialization and is ready to create browser windows.
-// Some APIs can only be used after this event occurs.
+// Settes i gang når Electron har blitt lastet og initialisert 
 app.on('ready', createWindow)
 
-// Quit when all windows are closed.
+// Avslutt hele appen når alle vinduer er lukket
 app.on('window-all-closed', function () {
-    // On OS X it is common for applications and their menu bar
-    // to stay active until the user quits explicitly with Cmd + Q
     if (process.platform !== 'darwin') {
         app.quit()
     }
 })
 
 app.on('activate', function () {
-    // On OS X it's common to re-create a window in the app when the
-    // dock icon is clicked and there are no other windows open.
+    // Når appen er aktiv, men vinduer er lukket
+    // Vi velger da å åpne et nytt app-vindu
     if (mainWindow === null) {
         createWindow()
     }
